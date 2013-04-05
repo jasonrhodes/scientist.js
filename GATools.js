@@ -24,13 +24,14 @@ var GATools = (function (gaq) {
     };
 
     Tools.Events = {};
+    Tools.Events.Registry = {};
 
-    Tools.Events.prototype.register = function (name, category, action) {
-        Tools.Events[name] = new Tools.Event(category, action);
+    Tools.Events.register = function (name, category, action) {
+        Tools.Events.Registry[name] = new Tools.Event(category, action);
     };
 
-    Tools.Events.prototype.track = function (name, label, value) {
-        Tools.Events[name].track(label, value);
+    Tools.Events.track = function (name, label, value) {
+        Tools.Events.Registry[name].track(label, value);
     };
 
     Tools.trackEvent = function (category, action, label, value) {
@@ -41,6 +42,8 @@ var GATools = (function (gaq) {
     return Tools;
 
 })(_gaq);
+
+
 
 /**
  * To set up Google Analytics
