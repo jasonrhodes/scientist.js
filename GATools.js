@@ -8,10 +8,13 @@ var GATools = (function (analytics) {
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+
+        return this;
     };
 
     Tools.trackPageview = function () {
         analytics.push(["_trackPageview"]);
+        return this;
     };
 
     Tools.Event = function (category, action) {
@@ -22,6 +25,7 @@ var GATools = (function (analytics) {
     Tools.Event.prototype.track = function (label, value) {
         // analytics._trackEvent()
         console.log([this.category, this.action, label, value]);
+        return this;
     };
 
     Tools.Events = {};
@@ -58,6 +62,13 @@ GATools.init("UA-XXXX");
  */
 
 GATools.trackPageview();
+
+
+/**
+ * Init and track pageview at once, per usual
+ */
+
+GATools.init("UA-XXXX").trackPageview();
 
 
 /**
