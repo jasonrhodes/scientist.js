@@ -1,9 +1,8 @@
-var GATools = function (analytics) {
+var Scientist = function (analytics) {
+    
+    var analytics = analytics || window._gaq || [];
 
-    var Tools = {};
-
-    Tools.init = function (UA) {
-        analytics = analytics || [];
+    this.initialize = function (UA) {
         analytics.push(["_setAccount", UA]);
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -12,68 +11,82 @@ var GATools = function (analytics) {
         return this;
     };
 
-    Tools.trackPageview = function () {
+    this.trackPageview = function () {
         analytics.push(["_trackPageview"]);
         return this;
     };
 
-    Tools.Event = function (category, action) {
+    this.Event = function (category, action) {
         this.category = category;
         this.action = action;
     };
 
-    Tools.Event.prototype.track = function (label, value) {
-        // analytics._trackEvent()
-        console.log([this.category, this.action, label, value]);
+    this.Event.prototype.track = function (params) {
+        var category = params.category || this.category;
+        var category = params.action || this.action;
+
+        // console.log([category, action, params.label, params.value, params.noninteraction]);
+        analytics.push([category, action, params.label, params.value, params.noninteraction]);
+
         return this;
     };
 
-    Tools.Events = {};
-    Tools.Events.Registry = {};
+    this.Events = {};
+    this.Events.Registry = {};
 
-    Tools.Events.register = function (name, category, action) {
-        Tools.Events.Registry[name] = new Tools.Event(category, action);
+    this.Events.register = function (name, category, action) {
+        this.Events.Registry[name] = new Tools.Event(category, action);
     };
 
-    Tools.Events.track = function (name, label, value) {
-        Tools.Events.Registry[name].track(label, value);
+    this.Events.track = function (name, params) {
+        this.Events.Registry[name].track(params);
     };
 
-    Tools.trackEvent = function (category, action, label, value) {
-        var event = new Tools.Event(category, action);
-        event.track(label, value);
+    this.trackEvent = function (params) {
+        var event = new this.Event(params.category);
+        event.track(params);
     };
-
-    return Tools;
 
 };
 
+/**
+ * MINIFIED VERSION
+ */
+var Scientist=function(a){var a=a||window._gaq||[];this.initialize=function(b){a.push(["_setAccount",b]);var c=document.createElement("script");c.type="text/javascript",c.async=!0,c.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var d=document.getElementsByTagName("script")[0];return d.parentNode.insertBefore(c,d),this},this.trackPageview=function(){return a.push(["_trackPageview"]),this},this.Event=function(a,b){this.category=a,this.action=b},this.Event.prototype.track=function(b){var c=b.category||this.category,c=b.action||this.action;return a.push([c,action,b.label,b.value,b.noninteraction]),this},this.Events={},this.Events.Registry={},this.Events.register=function(a,b,c){this.Events.Registry[a]=new Tools.Event(b,c)},this.Events.track=function(a,b){this.Events.Registry[a].track(b)},this.trackEvent=function(a){var b=new this.Event(a.category);b.track(a)}};
+
 
 /**
- * Create the GATools object
+ * Create the Scientist analytics object
+ * 
+ * Pass nothing to default to the standard global _gaq, or 
+ * pass in the GA object if it's named differently.
+ *
+ * If you haven't initialized GA yet, leave it blank and
+ * call scientist.initialize() with your UA string later.
  */
 
-var analytics = new Scientist(_gaq);
+var scientist = new Scientist();
+
 
 /**
  * To set up Google Analytics
  */
 
-GATools.init("UA-XXXX");
+scientist.initialize("UA-XXXX");
 
 
 /**
  * To track a pageview
  */
 
-GATools.trackPageview();
+scientist.trackPageview();
 
 
 /**
  * Init and track pageview at once, per usual
  */
 
-GATools.init("UA-XXXX").trackPageview();
+scientist.initialize("UA-XXXX").trackPageview();
 
 
 /**
@@ -82,11 +95,11 @@ GATools.init("UA-XXXX").trackPageview();
 
 // Option 1: Directly
 $(".thingy").on("click", function (e) {
-    GATools.trackEvent("my category", "my action", "my label", "my value");
+    scientist.trackEvent("my category", "my action", "my label", "my value");
 })
 
 // Option 2: Register your own event, track it later
-var myEvent = new GATools.Event("my category", "my action");
+var myEvent = new scientist.Event("my category", "my action");
 
 $(".thingy-1").on("click", function (e) {
     myEvent.track("my label", "my value");
@@ -97,13 +110,13 @@ $(".thingy-2").on("change", function (e) {
 });
 
 // Option 3: Register events to the GATools.Events object
-GATools.Events.register("My Event", "my category 1", "my action 1");
-GATools.Events.register("Other Event", "other category 2", "other action 2");
+scientist.Events.register("My Event", "my category 1", "my action 1");
+scientist.Events.register("Other Event", "other category 2", "other action 2");
 
 $(".thingy-1").on("click", function (e) {
-    GATools.Events.track("My Event", "my label", "my value");
+    scientist.Events.track("My Event", "my label", "my value");
 });
 
 $(".thingy-2").on("change", function (e) {
-    GATools.Events.track("Other Event", "other label", "other value");
+    scientist.Events.track("Other Event", "other label", "other value");
 });
