@@ -1,4 +1,4 @@
-var GATools = (function (analytics) {
+var GATools = function (analytics) {
 
     var Tools = {};
 
@@ -46,9 +46,14 @@ var GATools = (function (analytics) {
 
     return Tools;
 
-})(_gaq);
+};
 
 
+/**
+ * Create the GATools object
+ */
+
+var analytics = new Scientist(_gaq);
 
 /**
  * To set up Google Analytics
