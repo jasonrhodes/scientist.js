@@ -1,6 +1,6 @@
 var Scientist = function (analytics) {
     
-    var analytics = analytics || window._gaq || [];
+    this.analytics = analytics || window._gaq || [];
 
     this.initialize = function (UA) {
         analytics.push(["_setAccount", UA]);
