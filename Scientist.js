@@ -74,5 +74,9 @@ var Scientist = function (analytics) {
     this.Events.track = function (name, params) {
         this.Registry[name].track(params);
     };
+    
+    this.prototype.spy = function (options) {
+        // Much awesomeness to come
+    };
 
 };
