@@ -1,0 +1,13 @@
+{
+    "name": "scientist.js",
+    "version": "0.2.0",
+    "main": [
+        "scientist.js", 
+        "scientist.min.js"
+    ],
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "components"
+    ]
+}
