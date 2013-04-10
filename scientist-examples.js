@@ -57,9 +57,9 @@ scientist.Events.register("My Event", "my category 1");
 scientist.Events.register("Other Event", "other category 2");
 
 $(".thingy-1").on("click", function (e) {
-    scientist.Events.track("My Event", {});
+    scientist.Events.track("My Event", { action: "Clicked button", label: "Title Of My Button" });
 });
 
 $(".thingy-2").on("change", function (e) {
-    scientist.Events.track("Other Event", {});
+    scientist.Events.track("Other Event", { action: "Submitted form", value: 120 });
 });

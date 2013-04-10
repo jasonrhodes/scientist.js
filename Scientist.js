@@ -8,53 +8,71 @@
  *
  */
 var Scientist = function (analytics) {
-    
-    this.analytics = analytics || window._gaq || [];
 
+    var analytics = analytics || window._gaq || [];
+    var lib = this;
+    
+    var log = function (message) {
+        window.console && window.console.log && window.console.log(message);
+    };
+ 
     this.initialize = function (UA) {
-        this.analytics.push(["_setAccount", UA]);
+        analytics.push(["_setAccount", UA]);
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-
         return this;
     };
 
-    this.trackPageview = function (category, action, label, value, noninteraction) {
-        var event = new this.Event(category);
-        event.track({ action: action, label: label, value: value, noninteraction: noninteraction });
+    this.trackPageview = function () {
+        analytics.push(["_trackPageview"]);
         return this;
+    }
+    
+    this.checkAnalytics = function () {
+        return analytics;
     };
-
+ 
     this.Event = function (category, action) {
         this.category = category;
         this.action = action;
     };
-
+ 
     this.Event.prototype.track = function (params) {
         var category = params.category || this.category;
-        var category = params.action || this.action;
-
-        // console.log([category, action, params.label, params.value, params.noninteraction]);
-        this.analytics.push([category, action, params.label, params.value, params.noninteraction]);
-
+        var action = params.action || this.action;
+ 
+        //log([category, action, params.label, params.value, params.noninteraction]);
+        analytics.push(["_trackEvent", category, action, params.label, params.value, params.noninteraction]);
         return this;
     };
-
+    
+    this.trackEvent = function (params) {
+        var event = new this.Event();
+        if (!params.category && arguments.length > 1) {
+            params = {
+                category: arguments[0], 
+                action: arguments[1], 
+                label: arguments[2], 
+                value: arguments[3], 
+                noninteraction: arguments[4]
+            };
+        }
+        
+        //log(params);
+        event.track(params);
+        return this;
+    };
+    
     this.Events = {};
     this.Events.Registry = {};
-
+ 
     this.Events.register = function (name, category, action) {
-        this.Events.Registry[name] = new Tools.Event(category, action);
+        this.Registry[name] = new lib.Event(category, action);
     };
-
+ 
     this.Events.track = function (name, params) {
-        this.Events.Registry[name].track(params);
-    };
-
-    this.trackEvent = function (params) {
-        var event = new this.Event(params.category);
-        event.track(params);
+        this.Registry[name].track(params);
     };
 
 };
