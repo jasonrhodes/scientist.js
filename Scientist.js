@@ -4,7 +4,7 @@
  * A small helper library for working with Google Analytics.
  *
  * @author Jason Rhodes
- * @version 0.1
+ * @version 0.2
  *
  */
 var Scientist = function (analytics) {
