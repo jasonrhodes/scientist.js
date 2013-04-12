@@ -52,7 +52,7 @@ $(".thingy-2").on("change", function (e) {
     myEvent.track({ action: "my other action", label: "other label", value: 200 });
 });
 
-// Option 3: Register events to the GATools.Events object
+// Option 3: Register events to the Event registry for later reuse
 scientist.Events.register("My Event", "my category 1");
 scientist.Events.register("Other Event", "other category 2");
 
