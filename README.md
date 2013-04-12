@@ -6,7 +6,7 @@ A small (and lightweight!) helper library for working with Google Analytics.
 
 ## Installation
 
-We've registered ScientistJS on Bower. If you use Bower for package management, it's easy to install.
+We've registered ScientistJS on [Bower](http://twitter.github.io/bower/). If you use Bower for package management, it's easy to install.
 
 ```bash
 $ bower install scientist.js
